@@ -22,3 +22,9 @@ c=3 #Used in Stupiks control law
 #Values taken from Stupik for thrusting capabilities
 
 sout=stupik_lib.stupik_json_out(xe, ae, xp, ap, c, nu)
+
+#stout.sol = state vectors (evaders, costates and then pursuers) for the game
+#stout.t_span = t_span corresponding to sol
+#stout.control = control for evader and purssuer
+#sout.xopt = particle swarm optimized design variables
+#sout.fopt = particle swarm cost 
