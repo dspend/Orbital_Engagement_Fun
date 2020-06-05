@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 import math
 import matplotlib.pyplot as plt
 from numpy.linalg import inv
+import json
+from pyswarm import pso
 
 #These are all just functions I can call in a seperate script
 
@@ -188,7 +190,6 @@ def stupik_all_out(design_variables,*args):
         Sin_A=costatedxt/(Cos_B*norm_costates)
         #Equations 3.22 from Stupik
         #Saving each control vector away for plotting since ODE doesn't
-        $$
         if count ==0:
             control=[Sin_A*Cos_B,Cos_A*Cos_B,Sin_B]
         else:
@@ -197,3 +198,25 @@ def stupik_all_out(design_variables,*args):
         
     return sol,t_span,control
 
+def stupik_json_out(xe, ae, xp, ap, c, nu):
+
+    args=(xe,xp,ae,ap,c, nu)
+
+
+
+    args=(xe,xp,ae,ap,c, nu)
+    #Passing these through to the optimizer in the args
+
+    lb=[-1, -1,-1,0]
+    ub=[1, 1, 1, 60*60*6]
+
+    #Lower and upper bounds on variables
+
+    xopt, fopt = pso(stupik_cost_fun, lb, ub, [], args=args)
+    #It is important to remember that the costates can scale together
+    #So as long as they all scale the same way (i.e. two times each)
+    #They are essentially the same 
+    sol,t_span,control=stupik_all_out(xopt,*args)
+
+    stout={'sol':[sol],'t_span':[t_span],'control':[control],'xopt':[xopt],'fopt':[fopt]}
+    return stout
